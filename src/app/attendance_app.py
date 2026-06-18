@@ -19,8 +19,8 @@ from face.face_manager import DNN_PROTOTXT, FaceManager, MODEL_PATH
 # Fixed video display size
 VIDEO_WIDTH = 800
 VIDEO_HEIGHT = 600
-ATT_VIDEO_WIDTH = 700
-ATT_VIDEO_HEIGHT = 525
+ATT_VIDEO_WIDTH = 780
+ATT_VIDEO_HEIGHT = 585
 APP_NAME = "Face Attendance System"
 
 
@@ -28,7 +28,7 @@ class AttendanceApp:
     def __init__(self, root):
         self.root = root
         self.root.title(APP_NAME)
-        self.root.geometry("1000x750")
+        self.root.geometry("1100x780")
 
         # Initialize database
         init_db()
@@ -88,7 +88,8 @@ class AttendanceApp:
         self.reg_btn.grid(row=0, column=2, padx=10, pady=6, sticky="ew")
 
         self.reset_btn = tk.Button(ctrl_reg, text="Reset All Data", command=self.reset_database,
-                                   bg="orange", font=("Arial", 12, "bold"), width=16, height=2)
+                                   bg="red", fg="white", activebackground="#b00000", activeforeground="white",
+                                   font=("Arial", 12, "bold"), width=16, height=2)
         self.reset_btn.grid(row=0, column=3, padx=10, pady=6, sticky="ew")
 
         self.reg_status = tk.Label(self.reg_frame, text="", font=("Arial", 12))
@@ -112,7 +113,7 @@ class AttendanceApp:
         self.att_video_label = tk.Label(video_area)
         self.att_video_label.pack(anchor="n")
 
-        side_panel = tk.Frame(attendance_body, width=260)
+        side_panel = tk.Frame(attendance_body, width=270)
         side_panel.grid(row=0, column=1, sticky="nsew", padx=(6, 0))
         side_panel.grid_propagate(False)
         side_panel.grid_columnconfigure(0, weight=1)
@@ -133,6 +134,11 @@ class AttendanceApp:
                                   state=tk.DISABLED, font=("Arial", 12, "bold"), width=18, height=2)
         self.stop_btn.grid(row=3, column=0, padx=4, pady=4, sticky="ew")
 
+        self.att_reset_btn = tk.Button(ctrl_att, text="Reset All Data", command=self.reset_database,
+                                       bg="red", fg="white", activebackground="#b00000", activeforeground="white",
+                                       font=("Arial", 12, "bold"), width=18, height=2)
+        self.att_reset_btn.grid(row=4, column=0, padx=4, pady=(10, 4), sticky="ew")
+
         session_time_frame = tk.Frame(side_panel)
         session_time_frame.grid(row=1, column=0, sticky="ew", pady=(4, 10))
         session_time_frame.grid_columnconfigure(0, weight=1)
@@ -144,8 +150,10 @@ class AttendanceApp:
         feedback_frame = tk.Frame(side_panel, bd=1, relief=tk.SOLID)
         feedback_frame.grid(row=2, column=0, sticky="ew", pady=(4, 12))
         feedback_frame.grid_columnconfigure(0, weight=1)
-        tk.Label(feedback_frame, text="Feedback", font=("Arial", 12, "bold")).grid(row=0, column=0, padx=8, pady=(6, 2), sticky="w")
-        self.att_status = tk.Label(feedback_frame, text="", font=("Arial", 12), wraplength=230, justify=tk.LEFT)
+        self.att_feedback_title = tk.Label(feedback_frame, text="Registered:", font=("Arial", 12, "bold"))
+        self.att_feedback_title.grid(row=0, column=0, padx=8, pady=(6, 2), sticky="w")
+        self.att_status = tk.Label(feedback_frame, text="No one registered yet.", font=("Arial", 12),
+                                   wraplength=240, justify=tk.LEFT)
         self.att_status.grid(row=1, column=0, padx=8, pady=(2, 8), sticky="ew")
 
         # Export section
@@ -382,7 +390,7 @@ class AttendanceApp:
         self.stop_btn.config(state=tk.NORMAL)
         self.start_time_label.config(text=f"Start Time: {start_time}")
         self.end_time_label.config(text="End Time: --")
-        self.att_status.config(text=f"Session '{name}' started. CSV is recording.", fg="green")
+        self.att_status.config(text=f"Session started: {name}\nWaiting for registered users.", fg="green")
         self.refresh_sessions()
 
     def stop_session(self):
@@ -404,7 +412,7 @@ class AttendanceApp:
             self.start_btn.config(state=tk.NORMAL)
             self.stop_btn.config(state=tk.DISABLED)
             self.end_time_label.config(text=f"End Time: {end_time}")
-            self.att_status.config(text=f"Session stopped. CSV saved: {self.current_session_csv}", fg="blue")
+            self.att_status.config(text=f"Session stopped.\nCSV saved.", fg="blue")
             self.refresh_sessions()
 
     def process_attendance_frame(self, frame):
@@ -428,7 +436,7 @@ class AttendanceApp:
                         self.attendance_feedback_until[pid] = time.time() + 4.0
                         status_text = "Registered in session"
                         color = (0, 255, 0)  # green
-                        self.att_status.config(text=f"{name} registered in session.", fg="green")
+                        self.att_status.config(text=f"{name}\n{timestamp}", fg="green")
                     elif time.time() < self.attendance_feedback_until.get(pid, 0):
                         status_text = "Registered in session"
                         color = (0, 255, 0)  # green
@@ -505,7 +513,9 @@ class AttendanceApp:
         self.face_manager.load_model()
         self.refresh_sessions()
         self.reg_status.config(text="All data wiped", fg="blue")
-        self.att_status.config(text="Database reset", fg="blue")
+        self.att_status.config(text="No one registered yet.", fg="blue")
+        self.start_time_label.config(text="Start Time: --")
+        self.end_time_label.config(text="End Time: --")
         self.reg_name_entry.delete(0, tk.END)
 
     # ---------------------- Cleanup ----------------------
