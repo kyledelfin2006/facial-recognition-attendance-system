@@ -15,7 +15,7 @@ A Offline-based desktop application for **offline attendance tracking using faci
 ## Table of Contents
 
 - [Architecture Overview](#architecture-overview)
-- [Package Structure](#package-structure)
+- [File Structure](#file-structure)
 - [Core Design Patterns](#core-design-patterns)
 - [Key Features](#key-features)
 - [Workflow & Lifecycle](#workflow--lifecycle)
@@ -23,7 +23,7 @@ A Offline-based desktop application for **offline attendance tracking using faci
 - [Setup & Installation](#setup--installation)
 - [Troubleshooting](#troubleshooting)
 - [Data Management](#data-management)
-- [Updates](#Upcoming--Improvements)
+- [Upcoming Improvements](#Upcoming-Improvements)
 - [License](#license)
 
 ---
@@ -52,7 +52,7 @@ Image Storage / Model File
 
 ---
 
-## Package Structure
+## File Structure
 
 ```
 project_root/
