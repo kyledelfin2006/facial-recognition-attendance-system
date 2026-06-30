@@ -2,7 +2,7 @@
 
 A Offline-based desktop application for **offline attendance tracking using facial recognition**. The system detects faces via a pre-trained DNN and recognizes individuals using LBPH histograms. All data is stored locally in SQLite, attendance is exportable to CSV, and the app provides real-time feedback through a clean GUI.
 
->  **Prototype Deployment** — This system is currently being piloted by **two small businesses in Kalibo, Aklan** as a proof-of-concept attendance tracking solution.
+>  **Prototype Deployment** — This system was piloted by **two small businesses in Kalibo, Aklan** as a proof-of-concept attendance tracking solution.
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green)
